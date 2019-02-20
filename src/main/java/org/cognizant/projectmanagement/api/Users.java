@@ -1,12 +1,22 @@
 package org.cognizant.projectmanagement.api;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Users {
+
     String userId;
     String firstName;
     String lastName;
+    @Id
+    @GeneratedValue
     long employeeId;
     long projectId;
     long taskId;
+
+    public Users() {}
 
     public String getUserId() {
         return userId;

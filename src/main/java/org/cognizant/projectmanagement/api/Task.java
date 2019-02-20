@@ -1,8 +1,14 @@
 package org.cognizant.projectmanagement.api;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 public class Task {
+    @Id
+    @GeneratedValue
     long taskId;
     long parentId;
     long projectId;
@@ -11,6 +17,8 @@ public class Task {
     LocalDate endDate;
     int priority;
     String status;
+
+    public Task() {}
 
     public long getTaskId() {
         return taskId;

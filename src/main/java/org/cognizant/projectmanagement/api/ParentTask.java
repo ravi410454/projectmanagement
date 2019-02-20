@@ -1,9 +1,17 @@
 package org.cognizant.projectmanagement.api;
 
-public class ParentTask {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
+public class ParentTask {
+    @Id
+    @GeneratedValue
     long parentId;
     String parentTask;
+
+    public ParentTask() {}
 
     public long getParentId() {
         return parentId;

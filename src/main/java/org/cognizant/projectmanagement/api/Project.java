@@ -1,13 +1,21 @@
 package org.cognizant.projectmanagement.api;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 public class Project {
+    @Id
+    @GeneratedValue
     long projectId;
     String project;
     LocalDate startDate;
     LocalDate endDate;
     int priority;
+
+    public Project() {}
 
     public long getProjectId() {
         return projectId;
