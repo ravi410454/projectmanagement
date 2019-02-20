@@ -29,7 +29,7 @@ public class UsersRepositoryTest {
         entityManager.clear();
         Users savedUsers = usersRepository.save(new Users());
         assertNotNull(savedUsers);
-        assertEquals(4, savedUsers.getEmployeeId());
+        assertTrue(savedUsers.getEmployeeId() > 0);
     }
 
     @Test

@@ -30,7 +30,7 @@ public class TaskRepositoryTest {
     public void testSaveTask() {
         Task savedTask = taskRepository.save(new Task());
         assertNotNull(savedTask);
-        assertEquals(1, savedTask.getTaskId());
+        assertTrue(savedTask.getTaskId() > 0);
     }
 
     @Test

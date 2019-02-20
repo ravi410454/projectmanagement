@@ -30,7 +30,7 @@ public class ProjectRepositoryTest {
     public void testSaveProject() {
         Project savedProject = projectRepository.save(new Project());
         assertNotNull(savedProject);
-        assertEquals(1, savedProject.getProjectId());
+        assertTrue(savedProject.getProjectId() > 0);
     }
 
     @Test
