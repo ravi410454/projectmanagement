@@ -20,9 +20,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -104,6 +104,17 @@ public class UsersControllerTest {
         result = mvc.perform(requestBuilder).andReturn();
 
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
+    }
+
+    @Test
+    public void testDeleteUser() throws Exception {
+        doNothing().when(usersRepository).deleteById(anyLong());
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/users/1").accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(requestBuilder).andReturn();
+
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
     }
 
     private Users createMockUsers() {

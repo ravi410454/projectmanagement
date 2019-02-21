@@ -31,6 +31,8 @@ public class TaskController {
     @ResponseBody
     public ResponseEntity<Object> addTask(@RequestBody Task task) {
         Task savedTask = taskRepository.save(task);
+        if (savedTask == null)
+            return ResponseEntity.noContent().build();
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedTask.getTaskId()).toUri();
 

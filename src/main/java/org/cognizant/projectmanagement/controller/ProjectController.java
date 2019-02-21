@@ -27,10 +27,12 @@ public class ProjectController {
         return project.get();
     }
 
-    @PostMapping("/project/add")
+    @PostMapping("/project")
     @ResponseBody
     public ResponseEntity<Object> addProject(@RequestBody Project project) {
         Project savedProject = projectRepository.save(project);
+        if (savedProject == null)
+            return ResponseEntity.noContent().build();
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedProject.getProjectId()).toUri();
 

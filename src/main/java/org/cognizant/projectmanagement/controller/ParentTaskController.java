@@ -16,7 +16,7 @@ public class ParentTaskController {
     @Autowired
     private ParentTaskRepository parentTaskRepository;
 
-    @GetMapping("/parentask/{id}")
+    @GetMapping("/parenttask/{id}")
     @ResponseBody
     public ParentTask getParentTask(@PathVariable long id) {
         Optional<ParentTask> parentTask = parentTaskRepository.findById(id);
@@ -27,17 +27,19 @@ public class ParentTaskController {
         return parentTask.get();
     }
 
-    @PostMapping("/parentask/add")
+    @PostMapping("/parenttask")
     @ResponseBody
     public ResponseEntity<Object> addParentTask(@RequestBody ParentTask parentTask) {
         ParentTask savedParentTask = parentTaskRepository.save(parentTask);
+        if (savedParentTask == null)
+            return ResponseEntity.noContent().build();
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedParentTask.getParentId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/parentask/{id}")
+    @PutMapping("/parenttask/{id}")
     @ResponseBody
     public ResponseEntity<Object> editParentTask(@RequestBody ParentTask parentTask, @PathVariable long id) {
         Optional<ParentTask> parentTaskOptional = parentTaskRepository.findById(id);
@@ -52,7 +54,7 @@ public class ParentTaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/parentask/{id}")
+    @DeleteMapping("/parenttask/{id}")
     @ResponseBody
     public void deleteParentTask(@PathVariable long id) {
         parentTaskRepository.deleteById(id);
