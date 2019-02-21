@@ -2,13 +2,14 @@ package org.cognizant.projectmanagement.api;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
 public class Project {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long projectId;
     String project;
     LocalDate startDate;
