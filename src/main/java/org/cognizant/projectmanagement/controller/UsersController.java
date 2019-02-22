@@ -10,9 +10,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.print.attribute.standard.Media;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 public class UsersController {
 
     @Autowired
@@ -27,6 +29,17 @@ public class UsersController {
             throw new RuntimeException("Not found: id-" + id);
 
         return user.get();
+    }
+
+    @GetMapping("/users")
+    @ResponseBody
+    public List<Users> getUsers() {
+        List<Users> users = usersRepository.findAll();
+
+        if (users.isEmpty())
+            throw new RuntimeException("Not found");
+
+        return users;
     }
 
     @PostMapping("/users")

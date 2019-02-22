@@ -8,22 +8,22 @@ import javax.persistence.Id;
 @Entity
 public class Users {
 
-    String userId;
-    String firstName;
-    String lastName;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long employeeId;
-    long projectId;
-    long taskId;
+    Long userId;
+    String firstName;
+    String lastName;
+    Long employeeId;
+    Long projectId;
+    Long taskId;
 
     public Users() {}
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -43,27 +43,27 @@ public class Users {
         this.lastName = lastName;
     }
 
-    public long getEmployeeId() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(long employeeId) {
+    public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
 
-    public long getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(long projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
-    public long getTaskId() {
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(long taskId) {
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
 }

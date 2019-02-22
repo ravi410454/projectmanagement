@@ -29,7 +29,7 @@ public class UsersRepositoryTest {
         entityManager.clear();
         Users savedUsers = usersRepository.save(new Users());
         assertNotNull(savedUsers);
-        assertTrue(savedUsers.getEmployeeId() > 0);
+        assertTrue(savedUsers.getUserId() > 0);
     }
 
     @Test
@@ -62,11 +62,11 @@ public class UsersRepositoryTest {
     private Users createUsers() {
         entityManager.clear();
         Users users = new Users();
-        users.setUserId("user1");
+        users.setEmployeeId(1l);
         users.setFirstName("TestF");
         users.setLastName("TestL");
-        users.setProjectId(1);
-        users.setTaskId(1);
+        users.setProjectId(1l);
+        users.setTaskId(1l);
         entityManager.persist(users);
         entityManager.flush();
         return users;

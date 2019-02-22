@@ -119,12 +119,12 @@ public class UsersControllerTest {
 
     private Users createMockUsers() {
         Users users = new Users();
-        users.setEmployeeId(1);
-        users.setUserId("user1");
+        users.setEmployeeId(1l);
+        users.setUserId(1l);
         users.setFirstName("TestF");
         users.setLastName("TestL");
-        users.setProjectId(1);
-        users.setTaskId(1);
+        users.setProjectId(1l);
+        users.setTaskId(1l);
         return users;
     }
 }
