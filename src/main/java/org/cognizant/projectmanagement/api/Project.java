@@ -1,10 +1,8 @@
 package org.cognizant.projectmanagement.api;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Project {
@@ -15,6 +13,14 @@ public class Project {
     LocalDate startDate;
     LocalDate endDate;
     int priority;
+    @Transient
+    List<Task> tasks;
+    @Transient
+    Integer taskCount;
+    @Transient
+    Integer completed;
+    @Transient
+    long managerId;
 
     public Project() {}
 
@@ -56,5 +62,37 @@ public class Project {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public Integer getTaskCount() {
+        return taskCount;
+    }
+
+    public void setTaskCount(Integer taskCount) {
+        this.taskCount = taskCount;
+    }
+
+    public Integer getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Integer completed) {
+        this.completed = completed;
+    }
+
+    public long getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(long managerId) {
+        this.managerId = managerId;
     }
 }

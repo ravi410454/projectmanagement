@@ -1,9 +1,6 @@
 package org.cognizant.projectmanagement.api;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,6 +15,10 @@ public class Task {
     LocalDate endDate;
     int priority;
     String status;
+    @Transient
+    String parent;
+    @Transient
+    long userId;
 
     public Task() {}
 
@@ -83,5 +84,21 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

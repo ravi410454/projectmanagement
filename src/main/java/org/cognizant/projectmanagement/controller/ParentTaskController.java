@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,6 +27,17 @@ public class ParentTaskController {
             throw new RuntimeException("Not found: id-" + id);
 
         return parentTask.get();
+    }
+
+    @GetMapping("/parenttask")
+    @ResponseBody
+    public List<ParentTask> getParentTasks() {
+        List<ParentTask> parentTasks = parentTaskRepository.findAll();
+
+        if (parentTasks.isEmpty())
+            throw new RuntimeException("Not found");
+
+        return parentTasks;
     }
 
     @PostMapping("/parenttask")

@@ -15,7 +15,10 @@
         <appender-ref ref="Console"/>
     </root>
 
-    <logger name="org.cognizant" level="trace" additivity="false">
+    <logger name="org.cognizant" level="info" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+    <logger name="org.springframework" level="error" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
 
