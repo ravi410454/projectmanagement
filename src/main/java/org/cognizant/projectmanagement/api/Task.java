@@ -8,19 +8,24 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long taskId;
-    long parentId;
-    long projectId;
     String task;
+    long parentId;
+    @Transient
+    String parent;
+    long projectId;
+    @Transient
+    String project;
     LocalDate startDate;
     LocalDate endDate;
     int priority;
     String status;
     @Transient
-    String parent;
-    @Transient
     long userId;
+    @Transient
+    String user;
 
-    public Task() {}
+    public Task() {
+    }
 
     public long getTaskId() {
         return taskId;
@@ -100,5 +105,21 @@ public class Task {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

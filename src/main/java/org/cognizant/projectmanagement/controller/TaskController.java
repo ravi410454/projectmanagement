@@ -1,7 +1,11 @@
 package org.cognizant.projectmanagement.controller;
 
+import org.cognizant.projectmanagement.api.ParentTask;
+import org.cognizant.projectmanagement.api.Project;
 import org.cognizant.projectmanagement.api.Task;
 import org.cognizant.projectmanagement.api.Users;
+import org.cognizant.projectmanagement.repo.ParentTaskRepository;
+import org.cognizant.projectmanagement.repo.ProjectRepository;
 import org.cognizant.projectmanagement.repo.TaskRepository;
 import org.cognizant.projectmanagement.repo.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,12 @@ public class TaskController {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private ParentTaskRepository parentTaskRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @GetMapping("/task/{id}")
     @ResponseBody
     public Task getTask(@PathVariable long id) {
@@ -30,6 +40,26 @@ public class TaskController {
 
         if (!task.isPresent())
             throw new RuntimeException("Not found: id-" + id);
+
+        if (task.get().getProjectId() > 0) {
+            Optional<Project> project = projectRepository.findById(task.get().getProjectId());
+            if (project.isPresent()) {
+                task.get().setProject(project.get().getProject());
+            }
+        }
+
+        if (task.get().getParentId() > 0) {
+            Optional<ParentTask> parentTask = parentTaskRepository.findById(task.get().getParentId());
+            if (parentTask.isPresent()) {
+                task.get().setParent(parentTask.get().getParentTask());
+            }
+        }
+
+        List<Users> users = usersRepository.findByTaskId(id);
+        if (users != null && !users.isEmpty()) {
+            task.get().setUserId(users.get(0).getUserId());
+            task.get().setUser(users.get(0).getFirstName() + " " + users.get(0).getLastName());
+        }
 
         return task.get();
     }
@@ -76,6 +106,14 @@ public class TaskController {
         task.setTaskId(id);
 
         taskRepository.save(task);
+
+        Optional<Users> usersOptional = usersRepository.findById(task.getUserId());
+        if (usersOptional.isPresent()) {
+            Users user = usersOptional.get();
+            user.setProjectId(task.getProjectId());
+            user.setTaskId(task.getTaskId());
+            usersRepository.save(user);
+        }
 
         return ResponseEntity.noContent().build();
     }
