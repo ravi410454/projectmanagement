@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -77,6 +78,25 @@ public class TaskControllerTest {
     }
 
     @Test
+    public void testGetTasks() throws Exception {
+        when(taskRepository.findAll()).thenReturn(Arrays.asList(createMockTask()));
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/task").accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mvc.perform(requestBuilder).andReturn();
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+        JSONAssert.assertEquals("[{taskId:1, parentId:2, projectId:3, task:Test, startDate:2019-02-01, endDate:2019-12-31, priority:1,status:Status}]",
+                result.getResponse().getContentAsString(), false);
+
+        when(taskRepository.findAll()).thenReturn(new ArrayList<>());
+        try {
+            result = mvc.perform(requestBuilder).andReturn();
+        } catch (Exception ex) {
+            assertEquals("Not found", ex.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void testAddTask() throws Exception {
         String request = "{\"taskId\":\"1\", \"parentId\":\"2\", \"projectId\":\"3\", \"task\":\"Test\", \"startDate\":\"2019-02-01\", " +
                 "\"endDate\":\"2019-12-31\", \"priority\":\"1\", \"status\":\"Status\"}";
@@ -92,13 +112,6 @@ public class TaskControllerTest {
         assertEquals("http://localhost/task/1",
                 result.getResponse().getHeader(HttpHeaders.LOCATION));
 
-        requestBuilder = MockMvcRequestBuilders.get("/task").accept(MediaType.APPLICATION_JSON)
-                .content(request).contentType(MediaType.APPLICATION_JSON);
-        try {
-            result = mvc.perform(requestBuilder).andReturn();
-        } catch (Exception ex) {
-            assertEquals("Not found", ex.getCause().getMessage());
-        }
         when(taskRepository.save(any(Task.class))).thenReturn(null);
         requestBuilder = MockMvcRequestBuilders.post("/task").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
