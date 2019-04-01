@@ -45,7 +45,7 @@ public class UsersControllerTest {
         MvcResult result = mvc.perform(requestBuilder).andReturn();
 
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        JSONAssert.assertEquals("{userId:user1,firstName:TestF,lastName:TestL,employeeId:1,projectId:1,taskId:1}",
+        JSONAssert.assertEquals("{userId:1,firstName:TestF,lastName:TestL,employeeId:1,projectId:1,taskId:1}",
                 result.getResponse().getContentAsString(), false);
 
         try {
@@ -58,7 +58,7 @@ public class UsersControllerTest {
 
     @Test
     public void testAddUser() throws Exception {
-        String request = "{\"userId\":\"user1\",\"firstName\":\"TestF\",\"lastName\":\"TestL\",\"employeeId\":\"1\",\"projectId\":\"1\",\"taskId\":\"1\"}";
+        String request = "{\"userId\":\"1\",\"firstName\":\"TestF\",\"lastName\":\"TestL\",\"employeeId\":\"1\",\"projectId\":\"1\",\"taskId\":\"1\"}";
         when(usersRepository.save(any(Users.class))).thenReturn(createMockUsers());
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/users").accept(MediaType.APPLICATION_JSON)
@@ -71,9 +71,11 @@ public class UsersControllerTest {
 
         requestBuilder = MockMvcRequestBuilders.get("/users").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
-        result = mvc.perform(requestBuilder).andReturn();
-
-        assertEquals(HttpStatus.METHOD_NOT_ALLOWED.value(), result.getResponse().getStatus());
+        try {
+            result = mvc.perform(requestBuilder).andReturn();
+        } catch (Exception ex) {
+            assertEquals("Not found", ex.getCause().getMessage());
+        }
 
         when(usersRepository.save(any(Users.class))).thenReturn(null);
         requestBuilder = MockMvcRequestBuilders.post("/users").accept(MediaType.APPLICATION_JSON)
@@ -85,7 +87,7 @@ public class UsersControllerTest {
 
     @Test
     public void testEditUser() throws Exception {
-        String request = "{\"userId\":\"user1\",\"firstName\":\"First\",\"lastName\":\"Last\",\"employeeId\":\"1\",\"projectId\":\"1\",\"taskId\":\"1\"}";
+        String request = "{\"userId\":\"1\",\"firstName\":\"First\",\"lastName\":\"Last\",\"employeeId\":\"1\",\"projectId\":\"1\",\"taskId\":\"1\"}";
         when(usersRepository.findById(anyLong())).thenReturn(Optional.of(createMockUsers()));
         Users users = createMockUsers();
         users.setFirstName("First");

@@ -49,7 +49,7 @@ public class TaskController {
         }
 
         if (task.get().getParentId() > 0) {
-            Optional<ParentTask> parentTask = parentTaskRepository.findById(task.get().getParentId());
+             Optional<ParentTask> parentTask = parentTaskRepository.findById(task.get().getParentId());
             if (parentTask.isPresent()) {
                 task.get().setParent(parentTask.get().getParentTask());
             }

@@ -49,7 +49,7 @@ public class UsersRepositoryTest {
         Users users = createUsers();
         Optional<Users> savedUsers = usersRepository.findById(users.getEmployeeId());
         assertTrue(savedUsers.isPresent());
-        assertEquals("user1", savedUsers.get().getUserId());
+        assertEquals(Long.valueOf(1), savedUsers.get().getUserId());
     }
 
     @Test

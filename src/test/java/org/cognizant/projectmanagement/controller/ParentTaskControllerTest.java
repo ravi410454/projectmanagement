@@ -72,9 +72,11 @@ public class ParentTaskControllerTest {
 
         requestBuilder = MockMvcRequestBuilders.get("/parenttask").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
-        result = mvc.perform(requestBuilder).andReturn();
-
-        assertEquals(HttpStatus.METHOD_NOT_ALLOWED.value(), result.getResponse().getStatus());
+        try {
+            result = mvc.perform(requestBuilder).andReturn();
+        } catch (Exception ex) {
+            assertEquals("Not found",  ex.getCause().getMessage());
+        }
 
         when(parentTaskRepository.save(any(ParentTask.class))).thenReturn(null);
         requestBuilder = MockMvcRequestBuilders.post("/parenttask").accept(MediaType.APPLICATION_JSON)

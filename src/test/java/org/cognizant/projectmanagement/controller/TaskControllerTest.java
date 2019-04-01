@@ -1,7 +1,13 @@
 package org.cognizant.projectmanagement.controller;
 
+import org.cognizant.projectmanagement.api.ParentTask;
+import org.cognizant.projectmanagement.api.Project;
 import org.cognizant.projectmanagement.api.Task;
+import org.cognizant.projectmanagement.api.Users;
+import org.cognizant.projectmanagement.repo.ParentTaskRepository;
+import org.cognizant.projectmanagement.repo.ProjectRepository;
 import org.cognizant.projectmanagement.repo.TaskRepository;
+import org.cognizant.projectmanagement.repo.UsersRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -18,6 +24,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -36,10 +43,22 @@ public class TaskControllerTest {
     @MockBean
     private TaskRepository taskRepository;
 
+    @MockBean
+    private UsersRepository usersRepository;
+
+    @MockBean
+    private ParentTaskRepository parentTaskRepository;
+
+    @MockBean
+    private ProjectRepository projectRepository;
+
 
     @Test
     public void testGetTask() throws Exception {
         when(taskRepository.findById(1l)).thenReturn(Optional.of(createMockTask()));
+        when(parentTaskRepository.findById(2l)).thenReturn(Optional.of(createMockParent()));
+        when(projectRepository.findById(3l)).thenReturn(Optional.of(createMockProject()));
+        when(usersRepository.findByTaskId(3l)).thenReturn(Arrays.asList(createMockUser()));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/task/1").accept(MediaType.APPLICATION_JSON);
 
@@ -62,6 +81,8 @@ public class TaskControllerTest {
         String request = "{\"taskId\":\"1\", \"parentId\":\"2\", \"projectId\":\"3\", \"task\":\"Test\", \"startDate\":\"2019-02-01\", " +
                 "\"endDate\":\"2019-12-31\", \"priority\":\"1\", \"status\":\"Status\"}";
         when(taskRepository.save(any(Task.class))).thenReturn(createMockTask());
+        when(usersRepository.findById(4l)).thenReturn(Optional.of(createMockUser()));
+        when(usersRepository.save(any(Users.class))).thenReturn(createMockUser());
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/task").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
@@ -73,10 +94,11 @@ public class TaskControllerTest {
 
         requestBuilder = MockMvcRequestBuilders.get("/task").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
-        result = mvc.perform(requestBuilder).andReturn();
-
-        assertEquals(HttpStatus.METHOD_NOT_ALLOWED.value(), result.getResponse().getStatus());
-
+        try {
+            result = mvc.perform(requestBuilder).andReturn();
+        } catch (Exception ex) {
+            assertEquals("Not found", ex.getCause().getMessage());
+        }
         when(taskRepository.save(any(Task.class))).thenReturn(null);
         requestBuilder = MockMvcRequestBuilders.post("/task").accept(MediaType.APPLICATION_JSON)
                 .content(request).contentType(MediaType.APPLICATION_JSON);
@@ -130,6 +152,29 @@ public class TaskControllerTest {
         task.setTaskId(1);
         task.setStartDate(LocalDate.of(2019, 02, 01));
         task.setEndDate(LocalDate.of(2019, 12, 31));
+        task.setUserId(4);
         return task;
+    }
+
+    private Project createMockProject() {
+        Project project = new Project();
+        project.setProjectId(3);
+        project.setProject("Test Project");
+        return project;
+    }
+
+    private Users createMockUser() {
+        Users user = new Users();
+        user.setUserId(4l);
+        user.setFirstName("First");
+        user.setLastName("Last");
+        return user;
+    }
+
+    private ParentTask createMockParent() {
+        ParentTask parent = new ParentTask();
+        parent.setParentId(2);
+        parent.setParentTask("Parent Task");
+        return parent;
     }
 }
