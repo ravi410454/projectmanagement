@@ -47,9 +47,9 @@ public class UsersRepositoryTest {
     @Test
     public void testGetUsers() {
         Users users = createUsers();
-        Optional<Users> savedUsers = usersRepository.findById(users.getEmployeeId());
+        Optional<Users> savedUsers = usersRepository.findById(users.getUserId());
         assertTrue(savedUsers.isPresent());
-        assertEquals(Long.valueOf(1), savedUsers.get().getUserId());
+        assertEquals(Long.valueOf(1l), savedUsers.get().getEmployeeId());
     }
 
     @Test
